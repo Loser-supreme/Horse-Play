@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Elena Moore Massages — Luxury Massage & Wellness Sanctuary</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="styles.css">
+  <script>
+    // Prevent flash of wrong theme
+    (function() {
+      const saved = localStorage.getItem('theme');
+      if (saved) {
+        document.documentElement.setAttribute('data-theme', saved);
+      } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
+      document.documentElement.classList.add('preload');
+    })();
+  </script>
+</head>
+<body>
+  <div class="spa-container" id="spaContainer">
+    <!-- Navigation -->
+    <nav class="nav" id="mainNav">
+      <a href="#" class="nav-logo">Elena Moore Massages</a>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#philosophy">Philosophy</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#pricing">Pricing</a></li>
+        <li><a href="#gallery">Gallery</a></li>
+        <li><a href="#testimonials">Stories</a></li>
+        <li><a href="#contact">Contact</a></li>
+        <li>
+          <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+            <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+            <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+          </button>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero" id="hero">
+      <div class="hero-bg"></div>
+      <img src="images/IMG-20260704-WA0093.jpg" class="hero-img-left" alt="Woman with white horse by pool">
+      <img src="images/IMG-20260704-WA0095.jpg" class="hero-img-right" alt="Woman embracing white horse">
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <p class="hero-subtitle">Your Escape Awaits</p>
+        <h1>Relax. <em>Renew.</em> Rejuvenate.</h1>
+        <p class="hero-desc">Discover transformative massage therapies in our serene sanctuary, where nature's beauty and expert healing hands guide you to deep relaxation and renewal.</p>
+        <div class="hero-buttons">
+          <a href="#services" class="btn-primary">Explore Services</a>
+          <a href="#contact" class="btn-secondary">Book Now</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Philosophy -->
+    <section class="philosophy" id="philosophy">
+      <div class="philosophy-grid">
+        <img src="images/IMG-20260704-WA0104.jpg" class="philosophy-img" alt="Woman hugging white horse">
+        <div class="philosophy-text">
+          <h3>Our Philosophy</h3>
+          <p>At Elena Moore Massages, we believe true healing happens when body, mind, and spirit align. Our sanctuary is designed as a bridge between the natural world and inner peace — where the quiet strength of our white horses and the joyful energy of our Samoyed companions create an atmosphere of unconditional calm and serenity.</p>
+          <p>Every treatment is crafted to honor your unique journey. Our therapists combine ancient techniques with modern understanding, using organic oils and intuitive touch to release tension and restore balance.</p>
+          <p>Step into our space and feel the world slow down. Here, time is measured in breaths, not minutes.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Services -->
+    <section class="services" id="services">
+      <div class="section-header">
+        <h2>My Services</h2>
+        <p>A curated selection of experiences designed to fulfill your deepest desires and provide ultimate relaxation.</p>
+      </div>
+      <div class="services-grid">
+        <div class="service-card">
+          <div class="service-icon"><i class="fas fa-spa"></i></div>
+          <h3>Therapeutic Massage</h3>
+          <p>Professional, licensed massage therapy to relieve tension, reduce stress, and restore your body and mind. Every session is tailored to your specific needs.</p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon"><i class="fas fa-hand-holding-heart"></i></div>
+          <h3>GFE Experience</h3>
+          <p>The Girlfriend Experience — genuine connection, affectionate companionship, and intimate moments that feel natural, warm, and deeply satisfying.</p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon"><i class="fas fa-masks-theater"></i></div>
+          <h3>Fantasy & Roleplay</h3>
+          <p>Step into a world of imagination. From sultry scenarios to elaborate roleplay, I bring your fantasies to life with creativity and passion.</p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon"><i class="fas fa-crown"></i></div>
+          <h3>Domination</h3>
+          <p>Your Mistress awaits. Explore the thrilling dynamics of power, control, and submission in a safe, consensual, and exhilarating environment.</p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon"><i class="fas fa-gem"></i></div>
+          <h3>VIP Treatment</h3>
+          <p>The ultimate luxury experience. Premium service, undivided attention, and every detail crafted to make you feel like royalty.</p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon"><i class="fas fa-video"></i></div>
+          <h3>Digital Content</h3>
+          <p>Cam sessions, custom videos, photos, and sexting — connect with me from anywhere in the world, anytime you desire.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pricing -->
+    <section class="pricing" id="pricing">
+      <div class="section-header">
+        <h2>Pricing</h2>
+        <div class="divider"></div>
+        <p>Transparent pricing for every experience. All sessions include full companionship where applicable. Tap any package to inquire.</p>
+      </div>
+      <div class="pricing-grid">
+        <a href="#contact" class="price-card" data-package="30 Minutes - $200">
+          <div class="duration">30 Minutes</div>
+          <div class="price-row"><span class="dollar">$200</span><span class="currency">USD</span></div>
+          <ul class="features">
+            <li>Bodyrub or Escort</li>
+            <li>Quick & Satisfying</li>
+            <li>Discreet & Professional</li>
+          </ul>
+        </a>
+        <a href="#contact" class="price-card" data-package="1 Hour - $250">
+          <div class="duration">1 Hour</div>
+          <div class="price-row"><span class="dollar">$250</span><span class="currency">USD</span></div>
+          <ul class="features">
+            <li>Bodyrub & Escort Services</li>
+            <li>Full Experience</li>
+            <li>Relaxed & Unhurried</li>
+          </ul>
+        </a>
+        <a href="#contact" class="price-card popular" data-package="2 Hours - $350">
+          <div class="duration">2 Hours</div>
+          <div class="price-row"><span class="dollar">$350</span><span class="currency">USD</span></div>
+          <ul class="features">
+            <li>Bodyrub & Nuru Massage</li>
+            <li>Escort Services Included</li>
+            <li>Deeply Immersive</li>
+          </ul>
+        </a>
+        <a href="#contact" class="price-card" data-package="3 Hours - $400">
+          <div class="duration">3 Hours</div>
+          <div class="price-row"><span class="dollar">$400</span><span class="currency">USD</span></div>
+          <ul class="features">
+            <li>Bodyrub & Nuru Massage</li>
+            <li>Escort Services Included</li>
+            <li>Extended Pleasure</li>
+          </ul>
+        </a>
+        <a href="#contact" class="price-card" data-package="4 Hours - $450">
+          <div class="duration">4 Hours</div>
+          <div class="price-row"><span class="dollar">$450</span><span class="currency">USD</span></div>
+          <ul class="features">
+            <li>Bodyrub, Nuru & VIP</li>
+            <li>Escort Services Included</li>
+            <li>Premium Experience</li>
+          </ul>
+        </a>
+        <a href="#contact" class="price-card" data-package="Full Night - $700">
+          <div class="duration">Full Night</div>
+          <div class="price-row"><span class="dollar">$700</span><span class="currency">USD</span></div>
+          <ul class="features">
+            <li>Bodyrub, Nuru, GFE & VIP</li>
+            <li>Dinner & Escort Included</li>
+            <li>The Ultimate Experience</li>
+          </ul>
+        </a>
+      </div>
+      <div class="digital-section">
+        <div class="digital-title">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+          Digital Services
+        </div>
+        <div class="digital-grid">
+          <div class="digital-item">
+            <span class="digital-name">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+              Cam-Cam Session
+            </span>
+            <span class="digital-price">$150</span>
+          </div>
+          <div class="digital-item">
+            <span class="digital-name">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect></svg>
+              Video & Pics
+            </span>
+            <span class="digital-price">$100</span>
+          </div>
+          <div class="digital-item">
+            <span class="digital-name">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+              Sexting
+            </span>
+            <span class="digital-price">$100</span>
+          </div>
+          <div class="digital-item">
+            <span class="digital-name">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+              Custom Content
+            </span>
+            <span class="digital-price">$150</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Gallery -->
+    <section class="gallery" id="gallery">
+      <div class="section-header">
+        <h2>The Sanctuary</h2>
+        <div class="divider"></div>
+        <p>Glimpses of the peaceful world waiting for you.</p>
+      </div>
+      <div class="gallery-grid">
+        <div class="gallery-item tall">
+          <img src="images/IMG-20260704-WA0097.jpg" alt="Samoyed in garden">
+        </div>
+        <div class="gallery-item wide">
+          <img src="images/IMG-20260704-WA0100.jpg" alt="White horse by pool">
+        </div>
+        <div class="gallery-item">
+          <img src="images/IMG-20260704-WA0096.jpg" alt="White horse in corridor">
+        </div>
+        <div class="gallery-item">
+          <img src="images/IMG-20260704-WA0099.jpg" alt="Close up of white horse">
+        </div>
+        <div class="gallery-item wide">
+          <img src="images/IMG-20260704-WA0101.jpg" alt="Woman with horse by pool">
+        </div>
+        <div class="gallery-item">
+          <img src="images/IMG-20260704-WA0102.jpg" alt="Samoyed being petted">
+        </div>
+        <div class="gallery-item">
+          <img src="images/IMG-20260704-WA0094.jpg" alt="Horse and goats">
+        </div>
+        <div class="gallery-item">
+          <img src="images/IMG-20260704-WA0089.jpg" alt="Elegant moment">
+        </div>
+        <div class="gallery-item">
+          <img src="images/IMG-20260704-WA0085.jpg" alt="Tropical serenity">
+        </div>
+        <div class="gallery-item">
+          <img src="images/IMG-20260704-WA0098.jpg" alt="Paradise view">
+        </div>
+        <div class="gallery-item">
+          <img src="images/IMG-20260704-WA0092.jpg" alt="Beach beauty">
+        </div>
+      </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials" id="testimonials">
+      <div class="section-header">
+        <h2>Guest Stories</h2>
+        <div class="divider"></div>
+        <p>Words from those who have found their calm within our walls.</p>
+      </div>
+      <div class="testimonials-grid" id="testimonialsGrid">
+        <div class="testimonial-card">
+          <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          <p class="testimonial-text">"I've traveled to spas across the world, but nothing compares to the peace I felt here. The horses have an almost magical ability to ground you. I left feeling like a different person."</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">EC</div>
+            <div>
+              <div class="testimonial-name">Elena Castellanos</div>
+              <div class="testimonial-date">June 2026</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          <p class="testimonial-text">"The Equine-Guided Relaxation was unlike anything I've experienced. The therapist was incredibly intuitive, and having the white horse nearby during the massage created a sense of safety I've never felt before."</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">MR</div>
+            <div>
+              <div class="testimonial-name">Marcus Reid</div>
+              <div class="testimonial-date">May 2026</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          <p class="testimonial-text">"My husband and I did the Couples Harmony package for our anniversary. The setting is breathtaking — concrete architecture blending with lush forest. And the Samoyed greeted us like old friends!"</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">SL</div>
+            <div>
+              <div class="testimonial-name">Sarah &amp; Liam Chen</div>
+              <div class="testimonial-date">April 2026</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
+          <p class="testimonial-text">"The Forest Bathing Massage changed my perspective on what relaxation means. Being outdoors, hearing birds while receiving the most skilled Swedish massage — pure magic."</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">JP</div>
+            <div>
+              <div class="testimonial-name">James Park</div>
+              <div class="testimonial-date">March 2026</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          <p class="testimonial-text">"As someone with chronic back pain, the Hot Stone &amp; Crystal therapy provided relief that lasted weeks, not days. The therapists truly understand the body. The whole atmosphere is healing."</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">AN</div>
+            <div>
+              <div class="testimonial-name">Amara Nkosi</div>
+              <div class="testimonial-date">February 2026</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          <p class="testimonial-text">"I came for the Hydrotherapy Ritual and stayed for the entire day. The infinity pool overlooking the forest, the gentle horses grazing nearby — this is what wellness should feel like."</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">TK</div>
+            <div>
+              <div class="testimonial-name">Takeshi Kobayashi</div>
+              <div class="testimonial-date">January 2026</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Comment Form -->
+    <section class="comment-section" id="contact">
+      <div class="section-header">
+        <h2>Share Your Experience</h2>
+        <div class="divider"></div>
+        <p>We'd love to hear about your experience at Elena Moore Massages.</p>
+      </div>
+      <div class="comment-form-container">
+        <form id="reviewForm">
+          <div class="form-group">
+            <label for="reviewName">Your Name</label>
+            <input type="text" id="reviewName" placeholder="Enter your name" required>
+          </div>
+          <div class="form-group">
+            <label for="reviewService">Service Experienced</label>
+            <select id="reviewService" required>
+              <option value="">Select a service...</option>
+              <option>Therapeutic Massage</option>
+              <option>GFE Experience</option>
+              <option>Fantasy &amp; Roleplay</option>
+              <option>Domination</option>
+              <option>VIP Treatment</option>
+              <option>Digital Content</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Your Rating</label>
+            <div class="star-rating-input" id="starRating">
+              <span data-value="1">&#9733;</span>
+              <span data-value="2">&#9733;</span>
+              <span data-value="3">&#9733;</span>
+              <span data-value="4">&#9733;</span>
+              <span data-value="5">&#9733;</span>
+            </div>
+            <input type="hidden" id="ratingValue" value="0">
+          </div>
+          <div class="form-group">
+            <label for="reviewText">Your Story</label>
+            <textarea id="reviewText" placeholder="Tell us about your experience..." required></textarea>
+          </div>
+          <button type="submit" class="btn-primary btn-submit">Submit Your Review</button>
+        </form>
+      </div>
+    </section>
+
+
+    <!-- Contact -->
+    <section class="contact-section" id="contact">
+      <div class="section-header">
+        <h2>Get in Touch</h2>
+        <div class="divider"></div>
+        <p>Reach out through any channel below. I respond to all inquiries with discretion and care, usually within a few hours.</p>
+      </div>
+
+      <div class="contact-grid">
+        <!-- WhatsApp -->
+        <a href="https://wa.me/12132147781" target="_blank" rel="noopener noreferrer" class="contact-card">
+          <div class="contact-icon">
+            <i class="fab fa-whatsapp"></i>
+          </div>
+          <h3>WhatsApp</h3>
+          <p class="contact-detail">+1 (213) 214-7781</p>
+          <p class="contact-detail" style="font-size: 0.8rem; margin-top: 0.3rem;">Fastest response for bookings</p>
+          <span class="contact-hint">Click to chat <i class="fas fa-arrow-right" style="margin-left: 0.3rem; font-size: 0.7rem;"></i></span>
+        </a>
+
+        <!-- Signal -->
+        <a href="https://signal.me/#eu/_DIVCnP_kw8eUgws_DKfc8dtrK4P0Q1_9WMrlT92jaBlUPHar5pDBr64qua9KTYY" target="_blank" rel="noopener noreferrer" class="contact-card">
+          <div class="contact-icon">
+            <i class="fas fa-shield-alt"></i>
+          </div>
+          <h3>Signal</h3>
+          <p class="contact-detail">Private & Encrypted</p>
+          <p class="contact-detail" style="font-size: 0.8rem; margin-top: 0.3rem;">Most secure messaging option</p>
+          <span class="contact-hint">Click to connect <i class="fas fa-arrow-right" style="margin-left: 0.3rem; font-size: 0.7rem;"></i></span>
+        </a>
+
+        <!-- Phone -->
+        <a href="tel:+12132147781" class="contact-card">
+          <div class="contact-icon">
+            <i class="fas fa-phone"></i>
+          </div>
+          <h3>Phone</h3>
+          <p class="contact-detail">+1 (213) 214-7781</p>
+          <p class="contact-detail" style="font-size: 0.8rem; margin-top: 0.3rem;">Available during business hours</p>
+          <span class="contact-hint">Click to call <i class="fas fa-arrow-right" style="margin-left: 0.3rem; font-size: 0.7rem;"></i></span>
+        </a>
+
+        <!-- Email -->
+        <a href="mailto:hello@elenameoremassages.com" class="contact-card">
+          <div class="contact-icon">
+            <i class="fas fa-envelope"></i>
+          </div>
+          <h3>Email</h3>
+          <p class="contact-detail">hello@elenameoremassages.com</p>
+          <p class="contact-detail" style="font-size: 0.8rem; margin-top: 0.3rem;">For detailed inquiries</p>
+          <span class="contact-hint">Click to email <i class="fas fa-arrow-right" style="margin-left: 0.3rem; font-size: 0.7rem;"></i></span>
+        </a>
+
+        <!-- Location -->
+        <div class="contact-card location full-width">
+          <div class="contact-icon">
+            <i class="fas fa-map-marker-alt"></i>
+          </div>
+          <h3>Location</h3>
+          <p class="contact-detail">12 Tranquil Grove, Ubud, Bali</p>
+          <p class="contact-detail" style="font-size: 0.8rem; margin-top: 0.3rem;">Private sanctuary in the heart of Bali</p>
+          <p class="contact-detail" style="font-size: 0.8rem; margin-top: 0.5rem; color: var(--text-muted);">
+            <i class="fas fa-info-circle" style="margin-right: 0.3rem;"></i>
+            Exact address provided upon confirmed booking
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <h3>Elena Moore Massages</h3>
+      <p>Your sanctuary of peace and renewal.</p>
+      <div class="footer-contact">
+        <div class="footer-contact-item">
+          <span>&#x1F4CD;</span> 12 Tranquil Grove, Ubud, Bali
+        </div>
+        <div class="footer-contact-item">
+          <span>&#x1F4DE;</span> <a href="tel:+12132147781">+1 (213) 214-7781</a>
+        </div>
+        <div class="footer-contact-item">
+          <span>&#x2709;</span> <a href="mailto:hello@elenameoremassages.com">hello@elenameoremassages.com</a>
+        </div>
+        <div class="footer-contact-item">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-right:4px;"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+          <a href="https://wa.me/12132147781" target="_blank">WhatsApp</a>
+        </div>
+        <div class="footer-contact-item">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-right:4px;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+          <a href="https://signal.me/#eu/_DIVCnP_kw8eUgws_DKfc8dtrK4P0Q1_9WMrlT92jaBlUPHar5pDBr64qua9KTYY" target="_blank">Signal</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        &copy; 2026 Elena Moore Massages. All rights reserved.
+      </div>
+    </footer>
+</body>
+</html>
