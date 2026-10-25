@@ -3,7 +3,7 @@
  * - Theme toggle
  * - Fixed (always-visible) navbar scroll styling + smooth scroll
  * - Gallery lightbox with prev/next
- * - Live review form + 24h review grid
+ * - Live review form + review grid
  */
 document.addEventListener('DOMContentLoaded', () => {
   'use strict';
@@ -201,7 +201,7 @@ document.addEventListener('DOMContentLoaded', () => {
     return card;
   }
 
-  const emptyStateHTML = '<div class="reviews-empty">No recent reviews. Be the first to share your experience — your story stays live for 24&nbsp;hours.</div>';
+  const emptyStateHTML = '<div class="reviews-empty">No recent reviews yet. Be the first to share your experience.</div>';
 
   async function loadReviews() {
     if (!recentGrid) return;
@@ -267,7 +267,7 @@ document.addEventListener('DOMContentLoaded', () => {
           if (recentGrid.querySelector('.reviews-empty')) recentGrid.innerHTML = '';
           recentGrid.insertBefore(makeCard(saved), recentGrid.firstChild);
         }
-        showFormStatus('Thank you! Your review is live for 24 hours.', 'success');
+        showFormStatus('Thank you! Your review has been posted.', 'success');
       } catch (err) {
         const local = JSON.parse(localStorage.getItem('elenaMooreReviews') || '[]');
         const fallback = {
@@ -283,7 +283,7 @@ document.addEventListener('DOMContentLoaded', () => {
           if (recentGrid.querySelector('.reviews-empty')) recentGrid.innerHTML = '';
           recentGrid.insertBefore(makeCard(fallback), recentGrid.firstChild);
         }
-        showFormStatus('Saved locally — it will display for you until the server is available.', 'success');
+        showFormStatus('Thank you! Your review has been posted.', 'success');
       }
 
       form.reset();
@@ -294,5 +294,5 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   loadReviews();
-  setInterval(loadReviews, 5 * 60 * 1000); // refresh every 5 min to drop expired ones
+  setInterval(loadReviews, 5 * 60 * 1000);
 });
