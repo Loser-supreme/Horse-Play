@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,16 +9,19 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #1a1218;
-      --bg-card: rgba(255,255,255,0.03);
-      --border: rgba(255,255,255,0.08);
-      --text: #e8d5d0;
-      --text-muted: #a08088;
-      --accent: #d4a5a5;
+      --bg: #120c10;
+      --bg-card: rgba(255,255,255,0.035);
+      --bg-card-hover: rgba(255,255,255,0.055);
+      --border: rgba(255,255,255,0.09);
+      --border-strong: rgba(255,255,255,0.16);
+      --text: #f0e6e0;
+      --text-muted: #b09aa0;
+      --accent: #e0b4b4;
       --accent-soft: #b88888;
       --danger: #e57373;
       --danger-hover: #ef5350;
       --success: #81c784;
+      --warn: #ffb74d;
       --font-serif: 'Playfair Display', Georgia, serif;
       --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     }
@@ -28,28 +31,72 @@
       background: var(--bg);
       color: var(--text);
       min-height: 100vh;
-      padding: 2rem 1rem;
+      padding: 2rem 1rem 4rem;
+      line-height: 1.5;
     }
-    .container { max-width: 800px; margin: 0 auto; }
-    h1 {
-      font-family: var(--font-serif);
-      font-size: 2rem;
-      margin-bottom: 0.5rem;
-      text-align: center;
-    }
-    .subtitle {
-      text-align: center;
-      color: var(--text-muted);
-      font-size: 0.9rem;
+    .container { max-width: 860px; margin: 0 auto; }
+
+    .admin-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1rem;
       margin-bottom: 2rem;
+      flex-wrap: wrap;
     }
+    .admin-head h1 {
+      font-family: var(--font-serif);
+      font-size: 1.9rem;
+      margin-bottom: 0.3rem;
+    }
+    .admin-head p {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+    .head-actions { display: flex; gap: 0.5rem; }
+
+    .btn {
+      padding: 10px 18px;
+      border: none;
+      border-radius: 8px;
+      font-family: var(--font-sans);
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), var(--accent-soft));
+      color: #1a1218;
+      width: 100%;
+      padding: 12px;
+    }
+    .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+    .btn-ghost {
+      background: transparent;
+      border: 1px solid var(--border-strong);
+      color: var(--text-muted);
+    }
+    .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+    .btn-danger {
+      background: rgba(229,115,115,0.14);
+      color: var(--danger);
+      border: 1px solid rgba(229,115,115,0.3);
+      padding: 8px 14px;
+      font-size: 0.72rem;
+      flex-shrink: 0;
+    }
+    .btn-danger:hover { background: var(--danger); color: #fff; border-color: var(--danger); }
+
     .login-box {
       background: var(--bg-card);
       border: 1px solid var(--border);
       border-radius: 14px;
       padding: 2rem;
       max-width: 400px;
-      margin: 0 auto 2rem;
+      margin: 0 auto;
     }
     .login-box label {
       display: block;
@@ -71,164 +118,249 @@
       font-size: 0.95rem;
       margin-bottom: 1rem;
     }
-    .login-box input:focus {
-      outline: none;
-      border-color: var(--accent);
-    }
-    .btn {
-      width: 100%;
-      padding: 12px;
-      border: none;
-      border-radius: 8px;
-      font-family: var(--font-sans);
-      font-size: 0.85rem;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-    .btn-primary {
-      background: linear-gradient(135deg, var(--accent), var(--accent-soft));
-      color: var(--bg);
-    }
-    .btn-primary:hover {
-      opacity: 0.9;
-      transform: translateY(-1px);
-    }
-    .btn-danger {
-      background: var(--danger);
-      color: white;
-      padding: 8px 16px;
-      width: auto;
-      font-size: 0.75rem;
-    }
-    .btn-danger:hover {
-      background: var(--danger-hover);
-    }
+    .login-box input:focus { outline: none; border-color: var(--accent); }
+
     .status {
-      text-align: center;
-      padding: 0.8rem;
+      padding: 0.75rem;
       border-radius: 8px;
       margin-bottom: 1rem;
-      font-size: 0.85rem;
+      font-size: 0.83rem;
       display: none;
+      text-align: center;
     }
     .status.error { background: rgba(229,115,115,0.15); color: var(--danger); display: block; }
     .status.success { background: rgba(129,199,132,0.15); color: var(--success); display: block; }
-    .reviews-list { margin-top: 2rem; }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.8rem;
+      margin-bottom: 1.5rem;
+    }
+    .stat {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.1rem 1rem;
+      text-align: center;
+    }
+    .stat-num {
+      display: block;
+      font-family: var(--font-serif);
+      font-size: 1.7rem;
+      font-weight: 600;
+      color: var(--accent);
+      line-height: 1.1;
+    }
+    .stat-label {
+      display: block;
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      margin-top: 0.35rem;
+    }
+
+    .reviews-list { display: flex; flex-direction: column; gap: 0.9rem; }
+
     .review-item {
       background: var(--bg-card);
       border: 1px solid var(--border);
       border-radius: 12px;
       padding: 1.2rem;
-      margin-bottom: 1rem;
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
       gap: 1rem;
       transition: all 0.2s ease;
     }
-    .review-item:hover {
-      border-color: rgba(212,165,165,0.2);
-    }
-    .review-content { flex: 1; }
-    .review-stars { color: var(--accent); font-size: 0.9rem; margin-bottom: 0.4rem; }
+    .review-item:hover { border-color: rgba(224,180,180,0.25); background: var(--bg-card-hover); }
+    .review-content { flex: 1; min-width: 0; }
+    .review-stars { color: var(--accent); font-size: 0.9rem; margin-bottom: 0.4rem; letter-spacing: 0.05em; }
     .review-text {
       font-family: var(--font-serif);
       font-style: italic;
-      font-size: 0.9rem;
+      font-size: 0.92rem;
       line-height: 1.6;
       margin-bottom: 0.5rem;
+      word-wrap: break-word;
     }
-    .review-meta {
-      font-size: 0.75rem;
+    .review-meta { font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.55rem; }
+    .review-expiry {
+      font-size: 0.72rem;
       color: var(--text-muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 3px 9px;
+      border-radius: 20px;
+      background: rgba(255,183,77,0.1);
+      border: 1px solid rgba(255,183,77,0.22);
     }
+    .review-expiry strong { color: var(--warn); font-weight: 600; font-variant-numeric: tabular-nums; }
+
     .empty-state {
       text-align: center;
       color: var(--text-muted);
-      padding: 3rem;
+      padding: 3rem 1rem;
       font-size: 0.9rem;
+      border: 1px dashed var(--border-strong);
+      border-radius: 12px;
     }
+
     .hidden { display: none !important; }
+
+    @media (max-width: 560px) {
+      .stats { grid-template-columns: 1fr; }
+      .review-item { flex-direction: column; }
+      .btn-danger { width: 100%; text-align: center; }
+    }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>Admin Panel</h1>
-    <p class="subtitle">Elena Moore Massages — Review Moderation</p>
+    <div class="admin-head">
+      <div>
+        <h1>Admin Panel</h1>
+        <p>Review moderation · reviews auto-delete after 24 hours</p>
+      </div>
+      <div class="head-actions hidden" id="headActions">
+        <button class="btn btn-ghost" id="refreshBtn">Refresh</button>
+        <button class="btn btn-ghost" id="logoutBtn">Logout</button>
+      </div>
+    </div>
 
     <div id="loginBox" class="login-box">
       <div id="status" class="status"></div>
       <label for="adminSecret">Admin Secret</label>
-      <input type="password" id="adminSecret" placeholder="Enter your admin secret...">
+      <input type="password" id="adminSecret" placeholder="Enter your admin secret…" autocomplete="current-password">
       <button class="btn btn-primary" id="loginBtn">Access Reviews</button>
     </div>
 
     <div id="reviewsSection" class="hidden">
+      <div class="stats">
+        <div class="stat">
+          <span class="stat-num" id="statTotal">0</span>
+          <span class="stat-label">Live reviews</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num" id="statExpiring">0</span>
+          <span class="stat-label">Expiring &lt; 3h</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num">24h</span>
+          <span class="stat-label">Auto-delete window</span>
+        </div>
+      </div>
       <div id="reviewsList" class="reviews-list"></div>
     </div>
   </div>
 
   <script>
     const API_URL = '/api/reviews';
+
     const loginBox = document.getElementById('loginBox');
     const reviewsSection = document.getElementById('reviewsSection');
     const reviewsList = document.getElementById('reviewsList');
     const adminSecretInput = document.getElementById('adminSecret');
     const loginBtn = document.getElementById('loginBtn');
     const statusEl = document.getElementById('status');
+    const headActions = document.getElementById('headActions');
+    const refreshBtn = document.getElementById('refreshBtn');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const statTotal = document.getElementById('statTotal');
+    const statExpiring = document.getElementById('statExpiring');
 
     let currentSecret = '';
+    let reviewsCache = [];
+    let tickTimer = null;
+    let refreshTimer = null;
 
     function showStatus(msg, type) {
       statusEl.textContent = msg;
       statusEl.className = 'status ' + type;
-      setTimeout(() => { statusEl.className = 'status'; }, 3000);
+      clearTimeout(showStatus._t);
+      showStatus._t = setTimeout(() => { statusEl.className = 'status'; }, 3500);
     }
 
-    function createStars(rating) {
-      return '★'.repeat(rating) + '☆'.repeat(5 - rating);
+    function escapeHtml(s) {
+      return String(s ?? '').replace(/[&<>"']/g, c =>
+        ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])
+      );
+    }
+
+    function stars(n) {
+      n = Math.min(5, Math.max(0, parseInt(n, 10) || 0));
+      return '★'.repeat(n) + '☆'.repeat(5 - n);
+    }
+
+    function timeLeft(expiresAt) {
+      const ms = expiresAt - Date.now();
+      if (ms <= 0) return 'expired';
+      const totalSec = Math.floor(ms / 1000);
+      const h = Math.floor(totalSec / 3600);
+      const m = Math.floor((totalSec % 3600) / 60);
+      const s = totalSec % 60;
+      return `${h}h ${String(m).padStart(2, '0')}m ${String(s).padStart(2, '0')}s`;
+    }
+
+    function renderReviews() {
+      if (!reviewsCache.length) {
+        reviewsList.innerHTML = '<div class="empty-state">No live reviews right now. New reviews disappear automatically after 24 hours.</div>';
+        updateStats();
+        return;
+      }
+
+      reviewsList.innerHTML = reviewsCache.map(r => `
+        <div class="review-item" data-id="${escapeHtml(r.id)}">
+          <div class="review-content">
+            <div class="review-stars">${stars(r.rating)}</div>
+            <div class="review-text">"${escapeHtml(r.text)}"</div>
+            <div class="review-meta">${escapeHtml(r.name)} · ${escapeHtml(r.service)} · ${escapeHtml(r.date || '')}</div>
+            <div class="review-expiry" data-expires="${r.expiresAt}">
+              Expires in <strong>${timeLeft(r.expiresAt)}</strong>
+            </div>
+          </div>
+          <button class="btn btn-danger" type="button">Delete</button>
+        </div>
+      `).join('');
+
+      updateStats();
+    }
+
+    function updateStats() {
+      const now = Date.now();
+      const live = reviewsCache.filter(r => r.expiresAt > now);
+      statTotal.textContent = live.length;
+      statExpiring.textContent = live.filter(r => (r.expiresAt - now) < 3 * 3600 * 1000).length;
+    }
+
+    function tick() {
+      document.querySelectorAll('.review-expiry').forEach(el => {
+        const exp = parseInt(el.dataset.expires, 10);
+        const strong = el.querySelector('strong');
+        if (strong) strong.textContent = timeLeft(exp);
+      });
+      updateStats();
     }
 
     async function loadReviews() {
       try {
-        const res = await fetch(API_URL);
-        const reviews = await res.json();
-        renderReviews(reviews);
+        const res = await fetch(API_URL, {
+          cache: 'no-store',
+          headers: { 'X-Admin-Secret': currentSecret },
+        });
+        if (!res.ok) throw new Error('load failed');
+        const list = await res.json();
+        reviewsCache = Array.isArray(list) ? list : [];
+        renderReviews();
       } catch (err) {
         reviewsList.innerHTML = '<div class="empty-state">Failed to load reviews.</div>';
       }
     }
 
-    function renderReviews(reviews) {
-      if (!reviews || reviews.length === 0) {
-        reviewsList.innerHTML = '<div class="empty-state">No reviews yet.</div>';
-        return;
-      }
-
-      reviewsList.innerHTML = reviews.map(r => `
-        <div class="review-item" data-id="${r.id || ''}">
-          <div class="review-content">
-            <div class="review-stars">${createStars(r.rating)}</div>
-            <div class="review-text">"${escapeHtml(r.text)}"</div>
-            <div class="review-meta">${escapeHtml(r.name)} · ${escapeHtml(r.service)} · ${escapeHtml(r.date)}</div>
-          </div>
-          <button class="btn btn-danger" onclick="deleteReview('${r.id}')">Delete</button>
-        </div>
-      `).join('');
-    }
-
-    function escapeHtml(text) {
-      const div = document.createElement('div');
-      div.textContent = text;
-      return div.innerHTML;
-    }
-
     async function deleteReview(id) {
       if (!confirm('Delete this review permanently?')) return;
-
       try {
         const res = await fetch(API_URL, {
           method: 'DELETE',
@@ -240,8 +372,9 @@
         });
 
         if (res.ok) {
+          reviewsCache = reviewsCache.filter(r => r.id !== id);
+          renderReviews();
           showStatus('Review deleted.', 'success');
-          loadReviews();
         } else if (res.status === 401) {
           showStatus('Session expired. Please re-enter secret.', 'error');
           logout();
@@ -253,21 +386,14 @@
       }
     }
 
-    function logout() {
-      currentSecret = '';
-      loginBox.classList.remove('hidden');
-      reviewsSection.classList.add('hidden');
-      adminSecretInput.value = '';
-    }
+    reviewsList.addEventListener('click', (e) => {
+      const btn = e.target.closest('.btn-danger');
+      if (!btn) return;
+      const item = btn.closest('.review-item');
+      if (item) deleteReview(item.dataset.id);
+    });
 
-    loginBtn.addEventListener('click', async () => {
-      const secret = adminSecretInput.value.trim();
-      if (!secret) {
-        showStatus('Please enter the admin secret.', 'error');
-        return;
-      }
-
-      // Verify by attempting a harmless delete with a fake ID
+    async function verifySecret(secret) {
       try {
         const res = await fetch(API_URL, {
           method: 'DELETE',
@@ -275,28 +401,68 @@
             'Content-Type': 'application/json',
             'X-Admin-Secret': secret,
           },
-          body: JSON.stringify({ id: 'test-verify' }),
+          body: JSON.stringify({ id: '__verify__' }),
         });
-
-        if (res.status === 401) {
-          showStatus('Invalid admin secret.', 'error');
-          return;
-        }
-
-        // Secret is valid (even if the test ID wasn't found)
-        currentSecret = secret;
-        loginBox.classList.add('hidden');
-        reviewsSection.classList.remove('hidden');
-        loadReviews();
+        return res.status !== 401;
       } catch (err) {
-        showStatus('Connection failed.', 'error');
+        return false;
       }
+    }
+
+    function enterAdmin() {
+      loginBox.classList.add('hidden');
+      reviewsSection.classList.remove('hidden');
+      headActions.classList.remove('hidden');
+      loadReviews();
+      clearInterval(tickTimer);
+      clearInterval(refreshTimer);
+      tickTimer = setInterval(tick, 1000);
+      refreshTimer = setInterval(loadReviews, 30 * 1000);
+    }
+
+    function logout() {
+      currentSecret = '';
+      sessionStorage.removeItem('adminSecret');
+      clearInterval(tickTimer);
+      clearInterval(refreshTimer);
+      loginBox.classList.remove('hidden');
+      reviewsSection.classList.add('hidden');
+      headActions.classList.add('hidden');
+      adminSecretInput.value = '';
+    }
+
+    loginBtn.addEventListener('click', async () => {
+      const secret = adminSecretInput.value.trim();
+      if (!secret) return showStatus('Please enter the admin secret.', 'error');
+      loginBtn.disabled = true;
+      loginBtn.textContent = 'Checking…';
+      const ok = await verifySecret(secret);
+      loginBtn.disabled = false;
+      loginBtn.textContent = 'Access Reviews';
+      if (!ok) return showStatus('Invalid admin secret.', 'error');
+      currentSecret = secret;
+      sessionStorage.setItem('adminSecret', secret);
+      enterAdmin();
     });
 
-    // Allow Enter key
     adminSecretInput.addEventListener('keypress', (e) => {
       if (e.key === 'Enter') loginBtn.click();
     });
+
+    refreshBtn.addEventListener('click', loadReviews);
+    logoutBtn.addEventListener('click', logout);
+
+    // Auto-login within this tab if secret was used before
+    (async function autoLogin() {
+      const saved = sessionStorage.getItem('adminSecret');
+      if (!saved) return;
+      adminSecretInput.value = saved;
+      const ok = await verifySecret(saved);
+      if (ok) {
+        currentSecret = saved;
+        enterAdmin();
+      }
+    })();
   </script>
 </body>
 </html>

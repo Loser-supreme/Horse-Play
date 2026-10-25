@@ -1,401 +1,298 @@
 /**
- * Elena Moore Massages — Wellness Sanctuary
- * Interactive Scripts
+ * Elena Moore Massages — Interactive Scripts
+ * - Theme toggle
+ * - Fixed (always-visible) navbar scroll styling + smooth scroll
+ * - Gallery lightbox with prev/next
+ * - Live review form + 24h review grid
  */
-
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', () => {
   'use strict';
 
-  /* ============================================
-     THEME TOGGLE
-     ============================================ */
-  const themeToggle = document.getElementById('themeToggle');
+  const API_URL = '/api/reviews';
   const html = document.documentElement;
 
-  function setTheme(theme) {
+  /* ---------------- Theme ---------------- */
+  const themeToggle = document.getElementById('themeToggle');
+
+  function applyTheme(theme) {
     if (theme === 'dark' || theme === 'light') {
       html.setAttribute('data-theme', theme);
       localStorage.setItem('theme', theme);
     }
   }
 
-  function initTheme() {
+  (function initTheme() {
     const saved = localStorage.getItem('theme');
-    if (saved) {
-      setTheme(saved);
-    } else {
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      setTheme(prefersDark ? 'dark' : 'light');
-    }
-    // Remove preload class after a brief delay to enable transitions
-    setTimeout(() => {
-      html.classList.remove('preload');
-    }, 100);
-  }
+    if (saved) applyTheme(saved);
+    setTimeout(() => html.classList.remove('preload'), 80);
+  })();
 
   if (themeToggle) {
-    themeToggle.addEventListener('click', function(e) {
+    themeToggle.addEventListener('click', (e) => {
       e.preventDefault();
       e.stopPropagation();
-      const current = html.getAttribute('data-theme') || 'light';
-      const next = current === 'dark' ? 'light' : 'dark';
-      setTheme(next);
+      const current = html.getAttribute('data-theme') || 'dark';
+      applyTheme(current === 'dark' ? 'light' : 'dark');
     });
   }
 
-  // Listen for system changes
-  window.matchMedia('(prefers-color-scheme: dark)')
-    .addEventListener('change', e => {
-      if (!localStorage.getItem('theme')) {
-        setTheme(e.matches ? 'dark' : 'light');
-      }
-    });
+  /* ---------------- Nav (always visible) ---------------- */
+  const nav = document.getElementById('mainNav');
+  const navLinks = document.getElementById('navLinks');
 
-  initTheme();
+  window.addEventListener('scroll', () => {
+    if (nav) nav.classList.toggle('scrolled', window.scrollY > 40);
+  }, { passive: true });
 
-  /* ============================================
-     PRICE CARD CLICK → CONTACT
-     ============================================ */
-  const priceCards = document.querySelectorAll('.price-card');
-  const reviewService = document.getElementById('reviewService');
-
-  priceCards.forEach(card => {
-    card.addEventListener('click', function(e) {
-      // Don't intercept if user is middle-clicking or ctrl/cmd+clicking
-      if (e.ctrlKey || e.metaKey || e.button !== 0) return;
-
-      const pkg = this.dataset.package;
-      if (pkg && reviewService) {
-        // Store selected package in sessionStorage for form prefill
-        sessionStorage.setItem('selectedPackage', pkg);
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', (e) => {
+      const href = a.getAttribute('href');
+      if (!href || href === '#') return;
+      const target = document.querySelector(href);
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
     });
   });
 
-  // Prefill service select if coming from pricing
-  if (reviewService && sessionStorage.getItem('selectedPackage')) {
-    const pkg = sessionStorage.getItem('selectedPackage');
-    // Try to match or add as custom option
-    let matched = false;
-    Array.from(reviewService.options).forEach(opt => {
-      if (opt.value && pkg.toLowerCase().includes(opt.value.toLowerCase())) {
-        reviewService.value = opt.value;
-        matched = true;
+  /* ---------------- Reveal on scroll ---------------- */
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(en => {
+      if (en.isIntersecting) {
+        en.target.classList.add('visible');
+        revealObserver.unobserve(en.target);
       }
     });
-    if (!matched) {
-      // Add the package as a new option
-      const newOpt = document.createElement('option');
-      newOpt.value = pkg;
-      newOpt.textContent = pkg;
-      reviewService.insertBefore(newOpt, reviewService.options[1]);
-      reviewService.value = pkg;
-    }
-    sessionStorage.removeItem('selectedPackage');
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll(
+    '.service-card, .price-card, .digital-item, .testimonial-card, .gallery-item, .philosophy-text, .philosophy-img, .contact-card, .comment-form-container'
+  ).forEach((el, i) => {
+    el.classList.add('reveal');
+    el.style.transitionDelay = Math.min(i * 0.04, 0.4) + 's';
+    revealObserver.observe(el);
+  });
+
+  /* ---------------- Gallery lightbox ---------------- */
+  const galleryImgs = Array.from(document.querySelectorAll('.gallery-item img'));
+  let currentIdx = -1;
+  let lightboxEl = null;
+
+  function buildLightbox() {
+    const lb = document.createElement('div');
+    lb.className = 'lightbox';
+    lb.innerHTML = `
+      <button class="lightbox-close" aria-label="Close">&times;</button>
+      <button class="lightbox-nav prev" aria-label="Previous">&#10094;</button>
+      <img class="lightbox-img" alt="">
+      <button class="lightbox-nav next" aria-label="Next">&#10095;</button>
+    `;
+    document.body.appendChild(lb);
+    lb.querySelector('.lightbox-close').addEventListener('click', closeLightbox);
+    lb.querySelector('.prev').addEventListener('click', (e) => { e.stopPropagation(); showLightbox(currentIdx - 1); });
+    lb.querySelector('.next').addEventListener('click', (e) => { e.stopPropagation(); showLightbox(currentIdx + 1); });
+    lb.addEventListener('click', (e) => { if (e.target === lb) closeLightbox(); });
+    return lb;
   }
 
-  /* ============================================
-     STAR RATING
-     ============================================ */
-  const stars = document.querySelectorAll('#starRating span');
+  function showLightbox(idx) {
+    if (!galleryImgs.length) return;
+    currentIdx = (idx + galleryImgs.length) % galleryImgs.length;
+    const img = galleryImgs[currentIdx];
+    if (!lightboxEl) {
+      lightboxEl = buildLightbox();
+      document.body.classList.add('no-scroll');
+    }
+    const lbImg = lightboxEl.querySelector('.lightbox-img');
+    lbImg.src = img.src;
+    lbImg.alt = img.alt || '';
+    requestAnimationFrame(() => lightboxEl.classList.add('open'));
+  }
+
+  function closeLightbox() {
+    if (!lightboxEl) return;
+    lightboxEl.classList.remove('open');
+    document.body.classList.remove('no-scroll');
+    const el = lightboxEl;
+    lightboxEl = null;
+    setTimeout(() => el.remove(), 250);
+  }
+
+  galleryImgs.forEach((img, i) => {
+    const fig = img.closest('.gallery-item');
+    if (fig) fig.addEventListener('click', () => showLightbox(i));
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (!lightboxEl) return;
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowLeft') showLightbox(currentIdx - 1);
+    if (e.key === 'ArrowRight') showLightbox(currentIdx + 1);
+  });
+
+  /* ---------------- Star rating ---------------- */
+  const stars = Array.from(document.querySelectorAll('#starRating span'));
   const ratingInput = document.getElementById('ratingValue');
   let currentRating = 0;
 
-  if (stars.length > 0) {
-    stars.forEach(star => {
-      star.addEventListener('click', () => {
-        const val = parseInt(star.dataset.value);
-        currentRating = val;
-        ratingInput.value = val;
-        updateStars(val);
-      });
-
-      star.addEventListener('mouseenter', () => {
-        updateStars(parseInt(star.dataset.value));
-      });
+  function paintStars(v) {
+    stars.forEach(s => s.classList.toggle('active', parseInt(s.dataset.value, 10) <= v));
+  }
+  stars.forEach(star => {
+    star.addEventListener('mouseenter', () => paintStars(parseInt(star.dataset.value, 10)));
+    star.addEventListener('click', () => {
+      currentRating = parseInt(star.dataset.value, 10);
+      if (ratingInput) ratingInput.value = currentRating;
+      paintStars(currentRating);
     });
+  });
+  const starWrap = document.getElementById('starRating');
+  if (starWrap) starWrap.addEventListener('mouseleave', () => paintStars(currentRating));
 
-    document.getElementById('starRating').addEventListener('mouseleave', () => {
-      updateStars(currentRating);
-    });
+  /* ---------------- Reviews ---------------- */
+  const recentGrid = document.getElementById('recentReviews');
+  const form = document.getElementById('reviewForm');
+  const formStatus = document.getElementById('formStatus');
+
+  function escapeHtml(s) {
+    return String(s ?? '').replace(/[&<>"']/g, c =>
+      ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])
+    );
+  }
+  function initials(name) {
+    return String(name || '?').trim().split(/\s+/).map(w => w[0]).slice(0, 2).join('').toUpperCase();
+  }
+  function relTime(createdAt) {
+    if (!createdAt) return '';
+    const diff = Date.now() - createdAt;
+    const min = Math.floor(diff / 60000);
+    if (min < 1) return 'Just now';
+    if (min < 60) return min + ' min ago';
+    const hr = Math.floor(min / 60);
+    if (hr < 24) return hr + (hr === 1 ? ' hour ago' : ' hours ago');
+    return 'Over a day ago';
   }
 
-  function updateStars(val) {
-    stars.forEach(s => {
-      s.classList.toggle('active', parseInt(s.dataset.value) <= val);
-    });
-  }
-
-  /* ============================================
-     REVIEW FORM SUBMISSION — SHARED BACKEND
-     ============================================ */
-  const API_URL = '/api/reviews'; // Vercel Edge Function endpoint
-  const reviewForm = document.getElementById('reviewForm');
-
-  function escapeHtml(text) {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
-  }
-
-  function createReviewCard(review, prepend = false) {
-    const initials = review.name
-      .split(' ')
-      .map(n => n[0])
-      .join('')
-      .substring(0, 2)
-      .toUpperCase();
-
-    const filledStars = '&#9733;'.repeat(review.rating);
-    const emptyStars = '&#9734;'.repeat(5 - review.rating);
-    const dateStr = review.date || new Date().toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long'
-    });
-
-    const card = document.createElement('div');
-    card.className = 'testimonial-card';
+  function makeCard(r) {
+    const card = document.createElement('article');
+    card.className = 'testimonial-card live';
     card.style.opacity = '0';
-    card.style.transform = 'translateY(20px)';
-    card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+    card.style.transform = 'translateY(16px)';
+    const filled = '★'.repeat(r.rating);
+    const empty = '☆'.repeat(5 - r.rating);
+    const when = relTime(r.createdAt) || r.date || '';
     card.innerHTML = `
-      <div class="testimonial-stars">${filledStars}${emptyStars}</div>
-      <p class="testimonial-text">"${escapeHtml(review.text)}"</p>
+      <div class="testimonial-stars">${filled}${empty}</div>
+      <p class="testimonial-text">"${escapeHtml(r.text)}"</p>
       <div class="testimonial-author">
-        <div class="testimonial-avatar">${initials}</div>
+        <div class="testimonial-avatar">${escapeHtml(initials(r.name))}</div>
         <div>
-          <div class="testimonial-name">${escapeHtml(review.name)}</div>
-          <div class="testimonial-date">${dateStr} &middot; ${escapeHtml(review.service)}</div>
+          <div class="testimonial-name">${escapeHtml(r.name)}</div>
+          <div class="testimonial-date">${escapeHtml(when)} · ${escapeHtml(r.service)}</div>
         </div>
       </div>
     `;
-
-    const grid = document.getElementById('testimonialsGrid');
-    if (prepend) {
-      grid.insertBefore(card, grid.firstChild);
-    } else {
-      grid.appendChild(card);
-    }
-
     requestAnimationFrame(() => {
+      card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
       card.style.opacity = '1';
       card.style.transform = 'translateY(0)';
     });
-
     return card;
   }
 
-  async function submitReview(review) {
-    try {
-      const response = await fetch(API_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(review)
-      });
-      if (!response.ok) throw new Error('Failed to submit');
-      return await response.json();
-    } catch (err) {
-      console.warn('Backend unavailable, using localStorage fallback:', err);
-      // Fallback to localStorage
-      try {
-        const reviews = JSON.parse(localStorage.getItem('elenaMooreReviews') || '[]');
-        reviews.unshift(review);
-        localStorage.setItem('elenaMooreReviews', JSON.stringify(reviews.slice(0, 50)));
-      } catch (e) {}
-      return review;
-    }
-  }
+  const emptyStateHTML = '<div class="reviews-empty">No recent reviews. Be the first to share your experience — your story stays live for 24&nbsp;hours.</div>';
 
   async function loadReviews() {
-    const grid = document.getElementById('testimonialsGrid');
-    if (!grid) return;
-    if (grid.dataset.loaded) return;
-    grid.dataset.loaded = 'true';
-
+    if (!recentGrid) return;
     try {
-      const response = await fetch(API_URL);
-      if (response.ok) {
-        const reviews = await response.json();
-        reviews.forEach(review => createReviewCard(review));
+      const res = await fetch(API_URL, { cache: 'no-store' });
+      if (!res.ok) throw new Error('bad status');
+      const list = await res.json();
+      recentGrid.innerHTML = '';
+      if (!Array.isArray(list) || list.length === 0) {
+        recentGrid.innerHTML = emptyStateHTML;
         return;
       }
+      list.forEach(r => recentGrid.appendChild(makeCard(r)));
     } catch (err) {
-      console.warn('Could not load from backend, trying localStorage:', err);
+      try {
+        const local = JSON.parse(localStorage.getItem('elenaMooreReviews') || '[]');
+        recentGrid.innerHTML = '';
+        if (!local.length) { recentGrid.innerHTML = emptyStateHTML; return; }
+        local.forEach(r => recentGrid.appendChild(makeCard(r)));
+      } catch (e) {
+        recentGrid.innerHTML = '<div class="reviews-empty">Reviews are unavailable right now.</div>';
+      }
     }
-
-    // Fallback to localStorage
-    try {
-      const reviews = JSON.parse(localStorage.getItem('elenaMooreReviews') || '[]');
-      reviews.forEach(review => createReviewCard(review));
-    } catch (e) {}
   }
 
-  if (reviewForm) {
-    reviewForm.addEventListener('submit', async function(e) {
-      e.preventDefault();
+  function showFormStatus(msg, type) {
+    if (!formStatus) return;
+    formStatus.textContent = msg;
+    formStatus.className = 'form-status ' + (type || '');
+    if (type === 'success') {
+      setTimeout(() => {
+        if (formStatus.textContent === msg) {
+          formStatus.textContent = '';
+          formStatus.className = 'form-status';
+        }
+      }, 4200);
+    }
+  }
 
+  if (form) {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
       const name = document.getElementById('reviewName').value.trim();
       const service = document.getElementById('reviewService').value;
       const text = document.getElementById('reviewText').value.trim();
-      const rating = parseInt(document.getElementById('ratingValue').value) || 5;
+      const rating = parseInt(document.getElementById('ratingValue').value, 10) || 0;
 
-      if (!name || !service || !text) {
-        alert('Please fill in all fields.');
-        return;
+      if (!name || !service || !text) return showFormStatus('Please fill in all fields.', 'error');
+      if (rating < 1) return showFormStatus('Please select a star rating.', 'error');
+
+      const payload = { name, service, text, rating };
+
+      try {
+        const res = await fetch(API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        if (!res.ok) throw new Error('submit failed');
+        const saved = await res.json();
+
+        if (recentGrid) {
+          if (recentGrid.querySelector('.reviews-empty')) recentGrid.innerHTML = '';
+          recentGrid.insertBefore(makeCard(saved), recentGrid.firstChild);
+        }
+        showFormStatus('Thank you! Your review is live for 24 hours.', 'success');
+      } catch (err) {
+        const local = JSON.parse(localStorage.getItem('elenaMooreReviews') || '[]');
+        const fallback = {
+          ...payload,
+          id: 'local-' + Date.now(),
+          createdAt: Date.now(),
+          date: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long' }),
+        };
+        local.unshift(fallback);
+        localStorage.setItem('elenaMooreReviews', JSON.stringify(local.slice(0, 50)));
+
+        if (recentGrid) {
+          if (recentGrid.querySelector('.reviews-empty')) recentGrid.innerHTML = '';
+          recentGrid.insertBefore(makeCard(fallback), recentGrid.firstChild);
+        }
+        showFormStatus('Saved locally — it will display for you until the server is available.', 'success');
       }
 
-      if (rating === 0) {
-        alert('Please select a star rating.');
-        return;
-      }
-
-      const review = {
-        name,
-        service,
-        text,
-        rating,
-        date: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long' })
-      };
-
-      // Show immediately while submitting
-      const card = createReviewCard(review, true);
-
-      // Submit to backend
-      await submitReview(review);
-
-      // Reset form
-      this.reset();
+      form.reset();
       currentRating = 0;
-      updateStars(0);
-
-      // Scroll to new review
-      card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      if (ratingInput) ratingInput.value = 0;
+      paintStars(0);
     });
   }
 
   loadReviews();
-
-  /* ============================================
-     SMOOTH SCROLL
-     ============================================ */
-  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function(e) {
-      e.preventDefault();
-      const target = document.querySelector(this.getAttribute('href'));
-      if (target) {
-        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
-      // Close mobile menu
-      document.getElementById('navLinks').classList.remove('open');
-    });
-  });
-
-  /* ============================================
-     NAV SCROLL EFFECT
-     ============================================ */
-  const nav = document.getElementById('mainNav');
-  let lastScroll = 0;
-
-  window.addEventListener('scroll', () => {
-    const currentScroll = window.scrollY;
-
-    if (currentScroll > 80) {
-      nav.classList.add('scrolled');
-    } else {
-      nav.classList.remove('scrolled');
-    }
-
-    lastScroll = currentScroll;
-  });
-
-  /* ============================================
-     MOBILE NAV TOGGLE
-     ============================================ */
-  const navToggle = document.getElementById('navToggle');
-  const navLinks = document.getElementById('navLinks');
-
-  if (navToggle && navLinks) {
-    navToggle.addEventListener('click', () => {
-      navLinks.classList.toggle('open');
-    });
-  }
-
-  /* ============================================
-     SCROLL REVEAL ANIMATION
-     ============================================ */
-  const revealElements = document.querySelectorAll(
-    '.service-card, .price-card, .digital-item, .testimonial-card, .gallery-item, .philosophy-text, .philosophy-img, .contact-card'
-  );
-
-  const revealObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-        revealObserver.unobserve(entry.target);
-      }
-    });
-  }, {
-    threshold: 0.1,
-    rootMargin: '0px 0px -40px 0px'
-  });
-
-  revealElements.forEach((el, index) => {
-    el.classList.add('reveal');
-    el.style.transitionDelay = `${index * 0.05}s`;
-    revealObserver.observe(el);
-  });
-
-  /* ============================================
-     GALLERY LIGHTBOX
-     ============================================ */
-  const galleryItems = document.querySelectorAll('.gallery-item');
-
-  galleryItems.forEach(item => {
-    item.addEventListener('click', () => {
-      const img = item.querySelector('img');
-      if (!img) return;
-
-      // Create lightbox
-      const lightbox = document.createElement('div');
-      lightbox.style.cssText = `
-        position: fixed;
-        inset: 0;
-        z-index: 9999;
-        background: rgba(0,0,0,0.92);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: zoom-out;
-        opacity: 0;
-        transition: opacity 0.3s ease;
-      `;
-
-      const lightboxImg = document.createElement('img');
-      lightboxImg.src = img.src;
-      lightboxImg.alt = img.alt;
-      lightboxImg.style.cssText = `
-        max-width: 90vw;
-        max-height: 90vh;
-        object-fit: contain;
-        border-radius: 4px;
-        transform: scale(0.95);
-        transition: transform 0.3s ease;
-      `;
-
-      lightbox.appendChild(lightboxImg);
-      document.body.appendChild(lightbox);
-
-      requestAnimationFrame(() => {
-        lightbox.style.opacity = '1';
-        lightboxImg.style.transform = 'scale(1)';
-      });
-
-      lightbox.addEventListener('click', () => {
-        lightbox.style.opacity = '0';
-        lightboxImg.style.transform = 'scale(0.95)';
-        setTimeout(() => lightbox.remove(), 300);
-      });
-    });
-  });
-
+  setInterval(loadReviews, 5 * 60 * 1000); // refresh every 5 min to drop expired ones
 });
