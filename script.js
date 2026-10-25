@@ -3,7 +3,7 @@
  * Interactive Scripts
  */
 
-(function() {
+document.addEventListener('DOMContentLoaded', function() {
   'use strict';
 
   /* ============================================
@@ -34,8 +34,10 @@
   }
 
   if (themeToggle) {
-    themeToggle.addEventListener('click', () => {
-      const current = html.getAttribute('data-theme');
+    themeToggle.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      const current = html.getAttribute('data-theme') || 'light';
       const next = current === 'dark' ? 'light' : 'dark';
       setTheme(next);
     });
@@ -322,7 +324,7 @@
      SCROLL REVEAL ANIMATION
      ============================================ */
   const revealElements = document.querySelectorAll(
-    '.service-card, .price-card, .digital-item, .testimonial-card, .gallery-item, .philosophy-text, .philosophy-img'
+    '.service-card, .price-card, .digital-item, .testimonial-card, .gallery-item, .philosophy-text, .philosophy-img, .contact-card'
   );
 
   const revealObserver = new IntersectionObserver((entries) => {
@@ -396,4 +398,4 @@
     });
   });
 
-})();
+});
